@@ -1,0 +1,7 @@
+flask
+flask-restful
+flask-jwt-extended
+sqlalchemy
+django
+djangorestframework
+djangorestframework-jwt
