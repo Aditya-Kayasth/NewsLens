@@ -1,0 +1,9 @@
+Flask
+Flask-Cors
+aiohttp
+spacy
+torch
+transformers
+vaderSentiment
+requests
+beautifulsoup4
