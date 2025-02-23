@@ -1,0 +1,8 @@
+flask
+aiohttp
+spacy
+torch
+transformers
+vaderSentiment
+beautifulsoup4
+requests
