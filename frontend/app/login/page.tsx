@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { LoginFormDemo } from "../signup/login"; // Correct import
+import { LoginFormDemo } from "../login"; // Correct import
 import { BackgroundBeams } from "@/components/ui/background-beams";
 
 export default function LoginPage() {
