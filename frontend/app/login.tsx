@@ -11,6 +11,7 @@ export function LoginFormDemo() {
     email: "",
     password: "",
   });
+  const [error, setError] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -19,10 +20,29 @@ export function LoginFormDemo() {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    localStorage.setItem("userData", JSON.stringify(formData));
-    window.location.href = "http://localhost:3000/news-home";
+    setError("");
+    
+    try {
+      const response = await fetch("http://localhost:5000/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok) {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("userEmail", formData.email);
+        router.push(data.redirect || "/news-home");
+      } else {
+        setError(data.error || "Invalid credentials");
+      }
+    } catch (error) {
+      setError("Something went wrong. Please try again later.");
+    }
   };
 
   return (
@@ -33,6 +53,8 @@ export function LoginFormDemo() {
       <p className="text-neutral-600 text-sm max-w-sm mt-2 dark:text-neutral-300">
         Log in to your account to stay updated.
       </p>
+      
+      {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
 
       <form className="my-8" onSubmit={handleSubmit}>
         <LabelInputContainer className="mb-4">

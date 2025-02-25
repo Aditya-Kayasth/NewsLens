@@ -2,15 +2,16 @@ import React, { useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 export function SignupFormDemo() {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     firstname: "",
     lastname: "",
     email: "",
     password: "",
     location: "",
-    preferred_domains: [],
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -21,10 +22,30 @@ export function SignupFormDemo() {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    localStorage.setItem("userData", JSON.stringify(formData));
-    window.location.href = "/preferences"; // Redirect to Preferences Section
+    try {
+      const response = await fetch("http://localhost:5000/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: `${formData.firstname} ${formData.lastname}`,
+          email: formData.email,
+          password: formData.password,
+          location: formData.location,
+        }),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        localStorage.setItem("userEmail", formData.email);
+        router.push("/preferences");
+      } else {
+        alert(data.error);
+      }
+    } catch (error) {
+      alert("Error signing up");
+    }
   };
 
   return (
@@ -35,7 +56,6 @@ export function SignupFormDemo() {
       <p className="text-neutral-600 text-sm max-w-sm mt-2 dark:text-neutral-300">
         Signup to InsightPlus to know what's happening around you
       </p>
-
       <form className="my-8" onSubmit={handleSubmit}>
         <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
           <LabelInputContainer>
@@ -99,23 +119,11 @@ export function SignupFormDemo() {
           type="submit"
         >
           Sign up &rarr;
-          <BottomGradient />
         </button>
-
-        <div className="bg-gradient-to-r from-transparent via-neutral-300 dark:via-neutral-700 to-transparent my-8 h-[1px] w-full" />
       </form>
     </div>
   );
 }
-
-const BottomGradient = () => {
-  return (
-    <>
-      <span className="group-hover/btn:opacity-100 block transition duration-500 opacity-0 absolute h-px w-full -bottom-px inset-x-0 bg-gradient-to-r from-transparent via-cyan-500 to-transparent" />
-      <span className="group-hover/btn:opacity-100 blur-sm block transition duration-500 opacity-0 absolute h-px w-1/2 mx-auto -bottom-px inset-x-10 bg-gradient-to-r from-transparent via-indigo-500 to-transparent" />
-    </>
-  );
-};
 
 const LabelInputContainer = ({
   children,
