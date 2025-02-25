@@ -1,14 +1,25 @@
-"use client"; // Mark this as a Client Component 
-
-import { useState } from "react";
+"use client"; 
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 export default function PreferencesPage() {
   const router = useRouter();
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [email, setEmail] = useState<string | null>(null);
 
   // Available news categories
   const categories = ["Travel", "Technology", "Finance", "Health", "Sports", "Entertainment"];
+
+  // Get user email from localStorage
+  useEffect(() => {
+    const storedEmail = localStorage.getItem("userEmail");
+    if (!storedEmail) {
+      alert("User email not found! Redirecting to login...");
+      router.push("/login");
+    } else {
+      setEmail(storedEmail);
+    }
+  }, [router]);
 
   // Handle checkbox change
   const handleCategoryChange = (category: string) => {
@@ -20,19 +31,36 @@ export default function PreferencesPage() {
   };
 
   // Handle form submission
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (selectedCategories.length === 0) {
       alert("Please select at least one category!");
       return;
     }
-    
-    // Save preferences
-    localStorage.setItem("newsPreferences", JSON.stringify(selectedCategories));
-    alert("✅ Preferences saved successfully! Redirecting to News Section...");
 
-    // Redirect to the News Section
-    router.push("/news-home");
+    if (!email) {
+      alert("User email not found!");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:5000/update_preferences", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, preferred_domains: selectedCategories }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert("✅ Preferences saved successfully! Redirecting to News Section...");
+        router.push("/news-home");
+      } else {
+        alert(data.error);
+      }
+    } catch (error) {
+      alert("Error saving preferences");
+    }
   };
 
   return (

@@ -15,7 +15,7 @@ export const StickyScroll = ({
   }[];
   contentClassName?: string;
 }) => {
-  const [activeCard, setActiveCard] = React.useState(0);
+  const [activeCard, setActiveCard] = useState(0);
   const ref = useRef<any>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -37,6 +37,22 @@ export const StickyScroll = ({
     );
     setActiveCard(closestBreakpointIndex);
   });
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && typeof document !== "undefined") {
+      const globalStyles = document.createElement("style");
+      globalStyles.innerHTML = `
+        .no-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .no-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `;
+      document.head.appendChild(globalStyles);
+    }
+  }, []);
 
   return (
     <motion.div
@@ -64,21 +80,8 @@ export const StickyScroll = ({
           contentClassName
         )}
       >
-        {content[activeCard].content ?? null}
+        {content[activeCard]?.content ?? null}
       </div>
     </motion.div>
   );
 };
-
-// Hide scrollbar globally
-const globalStyles = document.createElement("style");
-globalStyles.innerHTML = `
-  .no-scrollbar::-webkit-scrollbar {
-    display: none;
-  }
-  .no-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-`;
-document.head.appendChild(globalStyles);
