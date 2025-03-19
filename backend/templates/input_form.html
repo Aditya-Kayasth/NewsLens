@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News Search - Preferences</title>
+</head>
+<body>
+    <h1>Search News Articles</h1>
+    <nav>
+        <a href="{{ url_for('input_form') }}">Home</a> | 
+        <a href="{{ url_for('search') }}">Search by Topic</a> | 
+        <a href="{{ url_for('top') }}">Top Headlines</a> | 
+        <a href="{{ url_for('checkb') }}">Summarize Related Articles</a> | 
+        <a href="{{ url_for('read_article') }}">Read Article Aloud</a>
+    </nav>
+    <br>
+    <form action="/" method="post">
+        <!-- Topic Selection -->
+        <label for="topics">Select up to 3 topics:</label><br>
+        {% for category in categories %}
+            <input type="checkbox" id="{{ category }}" name="topics" value="{{ category }}">
+            <label for="{{ category }}">{{ category }}</label><br>
+        {% endfor %}
+        <br>
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Article Reading</title>
+    <style>
+        .article-text {
+            border: 1px solid #ddd;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>Article Reading</h1>
+    <p>Article URL: <a href="{{ article_url }}" target="_blank">{{ article_url }}</a></p>
+    
+    <h2>Article Text</h2>
+    <div class="article-text">
+        {{ article_text }}
+    </div>
+    
+    <h2>Listen to the Article</h2>
+    <audio id="audioPlayer" controls>
+        <source src="{{ audio_url }}" type="audio/wav">
+        Your browser does not support the audio element.
+    </audio>
+    
+    <br><br>
+    <a href="{{ url_for('read_article') }}">Read Another Article</a> | 
+    <a href="{{ url_for('input_form') }}">Back to Home</a>
+    
+    <script>
+        const audioPlayer = document.getElementById('audioPlayer');
+        audioPlayer.addEventListener('play', () => console.log('Playing'));
+        audioPlayer.addEventListener('pause', () => console.log('Paused'));
+    </script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Summarize Related Articles</title>
+</head>
+<body>
+    <h1>Summarize Related Articles</h1>
+    <form method="post" action="{{ url_for('checkb') }}">
+        <label for="article_url">Enter the Article URL:</label>
+        <input type="url" id="article_url" name="article_url" required>
+        <button type="submit">Summarize</button>
+    </form>
+    <br>
+    <a href="{{ url_for('input_form') }}">Go Back</a>
+</body>
+</html>

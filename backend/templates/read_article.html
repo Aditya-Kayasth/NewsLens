@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Read Article Aloud</title>
+</head>
+<body>
+    <h1>Read Article Aloud</h1>
+    <form action="{{ url_for('read_article') }}" method="post">
+        <label for="article_url">Article URL:</label>
+        <input type="text" name="article_url" id="article_url" required>
+        <br><br>
+        <label for="voice_index">Select Voice:</label>
+        <select name="voice_index" id="voice_index">
+            {% for voice in voices %}
+                <option value="{{ loop.index0 }}">{{ voice.name }}</option>
+            {% endfor %}
+        </select>
+        <br><br>
+        <button type="submit">Read Article</button>
+    </form>
+    <br>
+    <a href="{{ url_for('input_form') }}">Back to Home</a>
+</body>
+</html>
