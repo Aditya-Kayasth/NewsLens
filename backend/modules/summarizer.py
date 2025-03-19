@@ -142,6 +142,7 @@ def mmr_summarizer(docs, query=None, lambda_param=0.5, summary_length=6, related
 
     summary_data = {'articles': [{'title': 'Summary', 'description': summary, 'info': info}]}
 
+    # Save summary to JSON file
     with open(file_path, 'w') as f:
         json.dump(summary_data, f, indent=4)
 
