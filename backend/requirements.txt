@@ -1,8 +1,7 @@
-flask
-aiohttp
-spacy
-torch
-transformers
-vaderSentiment
-beautifulsoup4
+Flask==2.0.3
 requests
+beautifulsoup4
+nltk
+textblob
+scikit-learn
+transformers
