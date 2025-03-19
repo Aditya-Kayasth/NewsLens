@@ -63,9 +63,14 @@ def related_articles_content(article_url, NEWSAPI_KEY):
         print(f"Number of related articles found: {len(related_articles)}")  # Debug print
 
         docs = []
+        info = []
 
         for article in related_articles:
             url = article.get('url')
+        
+            title = article.get('title')
+            
+            info.append({'title':title,'url':url})
             # Scrape each related article's content
             content = scrape_article(url)
             if content:
@@ -73,14 +78,15 @@ def related_articles_content(article_url, NEWSAPI_KEY):
                 formatted_content = clean_and_format_content(content)
                 if formatted_content:
                     docs.append(formatted_content)
-
+        
+            #docs.append()
         print(f"Number of documents for summarization: {len(docs)}")  # Debug print
-        return docs, query  # Return both the docs and the query for summarization
+        return docs, query, info  # Return both the docs and the query for summarization
 
-    return None, None
+    return None, None, None
 
 
-def mmr_summarizer(docs, query=None, lambda_param=0.5, summary_length=5):
+def mmr_summarizer(docs, query=None, lambda_param=0.5, summary_length=6, related= None, info=None):
     """
     Extractive summarization using Maximal Marginal Relevance (MMR).
     Returns a dictionary with the selected summary sentences.
@@ -125,5 +131,6 @@ def mmr_summarizer(docs, query=None, lambda_param=0.5, summary_length=5):
     summary_sentences = [sentences[idx] for idx in summary_indices]
     summary = ' '.join(summary_sentences)
     print(f"Generated Summary: {summary}")  # Debug print
+   ## print(f"===================={info}=================================")
 
-    return {'articles': [{'title': 'Summary', 'description': summary}]}
+    return {'articles': [{'title': 'Summary', 'description': summary , 'info':info}]}
