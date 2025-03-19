@@ -1,36 +1,34 @@
 {
   "users": [
     {
-      "name": "Arman Tiwari",
-      "email": "armantiwari01@gmail.com",
-      "password": "$2b$12$bI1Aqfpr/qKCD.qRdI33wugUJo0TA8EGdCFDBu6XEhQnQQQmcnkBu",
-      "location": "India",
+      "name": "po gg",
+      "email": "dcc@gm.vo",
+      "password": "$2b$12$sEgD9If68s/R6eEF82mLeuhXdocZqYXGrAdi2FNalf.Tzd8MR9kAe",
+      "location": "tvf",
       "preferred_domains": [
+        "Travel",
         "Technology",
-        "Finance",
-        "Health"
+        "Finance"
       ]
     },
     {
-      "name": "Shivansh qwerty",
-      "email": "test@example.com",
-      "password": "$2b$12$SFMTj8Yu2b/Gi60cpBhSheq/ZAlmp0bP8jxiSCpKulL6okPXRJqSy",
-      "location": "India",
+      "name": "Aditya  kayasth",
+      "email": "adityakayasth@gmail.com",
+      "password": "$2b$12$XObGNcfy5pWufh/wvXjNDOAhcLRkJ8mD8YyGUhohqmVPl68fxI07e",
+      "location": "Aurangabad",
       "preferred_domains": [
-        "Technology",
-        "Finance",
-        "Entertainment"
-      ]
-    },
-    {
-      "name": "Shobhit 123",
-      "email": "sample@qwert.com",
-      "password": "$2b$12$cX77O8HqfRIpuZJY49vcCeInzvYc04WrzO80PyU0Vx6qIus2eCZji",
-      "location": "India",
-      "preferred_domains": [
-        "Finance",
-        "Technology",
+        "Entertainment",
         "Travel"
+      ]
+    },
+    {
+      "name": "i love samosa",
+      "email": "sam@gm.cm",
+      "password": "$2b$12$QTXoAwhy0ZiX6NiH7QVdiOMnu2KgBIVObhsc36Pw1iU2fyKuJ.n8G",
+      "location": "In",
+      "preferred_domains": [
+        "Travel",
+        "Technology"
       ]
     }
   ]
