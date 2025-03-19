@@ -49,6 +49,7 @@ def save_users(users):
     with open(USERS_FILE, "w") as file:
         json.dump(users, file, indent=2)
 
+# Signup route
 @app.route("/signup", methods=["POST"])
 def signup():
     data = request.get_json()
@@ -78,6 +79,7 @@ def signup():
     
     return jsonify({"message": "User registered successfully. Redirecting to preferences page...", "redirect": "/preferences"}), 201
 
+# Login route
 @app.route("/login", methods=["POST"])
 def login():
     data = request.get_json()
@@ -114,7 +116,7 @@ def verify_token():
     except jwt.InvalidTokenError:
         return None
 
-
+# Preferences route
 @app.route("/preferences", methods=["POST", "OPTIONS"])
 def update_preferences():
     if request.method == "OPTIONS":
@@ -133,6 +135,7 @@ def update_preferences():
 
     return jsonify({"error": "User not found"}), 404
 
+# Search route
 @app.route("/search", methods=['POST'])
 def search():
     data = request.get_json()
@@ -157,6 +160,7 @@ def search():
     api_response = analyze_sentiments(api_response)
     return jsonify({"articles": api_response})
 
+# news-home route
 @app.route('/news', methods=['POST'])
 def fetch_news():
     data = request.get_json()  
@@ -196,6 +200,7 @@ def fetch_news():
 
     return jsonify({"articles": api_response})
 
+# top route
 @app.route("/top", methods=['GET'])
 def top():
     params = {
@@ -209,6 +214,7 @@ def top():
 
     return jsonify({"top_headlines": api_response})
 
+# checkbias route
 @app.route("/checkb", methods=['GET', 'POST'])
 def checkb():
     if request.method == 'POST':
@@ -226,7 +232,7 @@ def checkb():
     
     return jsonify({"message": "Send a POST request with 'article_url'."}), 405
 
-
+# read_article route
 @app.route("/read_article", methods=['GET', 'POST'])
 def read_article():
     if request.method == 'POST':
