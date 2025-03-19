@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 import os
 import uuid
 import pyttsx3
-
+import nltk
 from modules.news_api import get_articles, top_headlines
 from modules.content import fetch_full_content
 from modules.sentiment import analyze_sentiments
@@ -11,6 +11,8 @@ from modules.summarizer import related_articles_content, mmr_summarizer
 from modules.content import clean_and_format_content
 from modules.scrape_article import scrape_article
 from modules.readaloud import process_article_read_aloud
+nltk.download('punkt')
+nltk.download('stopwords')
 
 # You can still have your alternative TTS function if needed:
 # from modules.readout_loud import read_article_with_gtts, read_article_with_pyttsx3

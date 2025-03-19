@@ -1,8 +1,10 @@
+import os
+
 import nltk
 from nltk.tokenize import sent_tokenize, word_tokenize
 from nltk.corpus import stopwords
 from flask import jsonify
-
+from flask import jsonify
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
@@ -17,11 +19,13 @@ import json
 nltk.download('punkt')
 nltk.download('stopwords')
 
+def clear_json_file(file_path):
+    """Ensure the JSON file is empty before writing new data."""
+    if os.path.exists(file_path):
+        with open(file_path, 'w') as f:
+            json.dump({}, f)  
 
 def extract_keywords(text, num_keywords=5):
-    """
-    Extract keywords from text using NLTK frequency distribution.
-    """
     words = word_tokenize(text.lower())
     words = [word for word in words if word.isalpha()]
     stop_words = set(stopwords.words('english'))
@@ -86,11 +90,12 @@ def related_articles_content(article_url, NEWSAPI_KEY):
     return None, None, None
 
 
-def mmr_summarizer(docs, query=None, lambda_param=0.5, summary_length=6, related= None, info=None):
-    """
-    Extractive summarization using Maximal Marginal Relevance (MMR).
-    Returns a dictionary with the selected summary sentences.
-    """
+def mmr_summarizer(docs, query=None, lambda_param=0.5, summary_length=6, related=None, info=None):
+    file_path = "data/summary.json"
+
+    # Ensure the JSON file is empty
+    clear_json_file(file_path)
+
     # Tokenize each document into sentences
     sentences = [sent_tokenize(doc) for doc in docs if doc]
 
@@ -99,16 +104,19 @@ def mmr_summarizer(docs, query=None, lambda_param=0.5, summary_length=6, related
     print(f"Total number of sentences: {len(sentences)}")  # Debug print
 
     if not sentences:
-        return {'articles': [{'title': 'Summary', 'description': 'No sentences available for summarization.'}]}
-    
+        summary_data = {'articles': [{'title': 'Summary', 'description': 'No sentences available for summarization.'}]}
+        with open(file_path, 'w') as f:
+            json.dump(summary_data, f, indent=4)
+        return summary_data
+
     # Create a TF-IDF representation of the sentences
     vectorizer = TfidfVectorizer(stop_words='english')
     tfidf_matrix = vectorizer.fit_transform(sentences)
     sim_matrix = cosine_similarity(tfidf_matrix, tfidf_matrix)
-    
+
     summary_indices = []
     candidate_indices = list(range(len(sentences)))
-    
+
     for _ in range(min(summary_length, len(candidate_indices))):
         mmr_scores = []
         for i in candidate_indices:
@@ -117,7 +125,7 @@ def mmr_summarizer(docs, query=None, lambda_param=0.5, summary_length=6, related
                 query_vec = vectorizer.transform([query])
                 # Calculate cosine similarity between sentence and query vector
                 relevance = cosine_similarity(tfidf_matrix[i], query_vec)[0][0]
-            
+
             diversity = max([sim_matrix[i][j] for j in summary_indices], default=0)
             mmr_score = lambda_param * relevance - (1 - lambda_param) * diversity
             mmr_scores.append((mmr_score, i))
@@ -131,6 +139,11 @@ def mmr_summarizer(docs, query=None, lambda_param=0.5, summary_length=6, related
     summary_sentences = [sentences[idx] for idx in summary_indices]
     summary = ' '.join(summary_sentences)
     print(f"Generated Summary: {summary}")  # Debug print
-   ## print(f"===================={info}=================================")
 
-    return {'articles': [{'title': 'Summary', 'description': summary , 'info':info}]}
+    summary_data = {'articles': [{'title': 'Summary', 'description': summary, 'info': info}]}
+
+    # Save summary to JSON file
+    with open(file_path, 'w') as f:
+        json.dump(summary_data, f, indent=4)
+
+    return jsonify(summary_data)
